@@ -2,6 +2,7 @@
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
 using Apache.Ignite.Core.Cache;
@@ -17,18 +18,15 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
     /// <typeparam name="T"></typeparam>
     public class IgniteRepository<T> : IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
     {
+        private static int _id;
+        
         protected readonly ICache<int, T> _cache;
 
         public IgniteRepository(IIgnite ignite)
         {
-            // TODO: Sql config
-            var cfg = new CacheConfiguration
-            {
-                Name = typeof(T).FullName
-            };
-            _cache = ignite.GetOrCreateCache<int, T>(cfg);
+            _cache = ignite.GetCache<T>();
         }
-        
+
         public virtual async Task<T> GetByIdAsync(int id)
         {
             return await _cache.GetAsync(id);
@@ -51,6 +49,9 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
         public async Task<T> AddAsync(T entity)
         {
+            // Generate ID
+            // TODO: Use Ignite sequence
+            entity.Id = Interlocked.Increment(ref _id);
             await _cache.PutAsync(entity.Id, entity);
             return entity;
         }

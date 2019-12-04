@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Apache.Ignite.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -13,17 +14,12 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
 {
     public class SetQuantities
     {
-        private readonly CatalogContext _catalogContext;
         private readonly IAsyncRepository<Basket> _basketRepository;
         private readonly BasketBuilder BasketBuilder = new BasketBuilder();
 
         public SetQuantities()
         {
-            var dbOptions = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "TestCatalog")
-                .Options;
-            _catalogContext = new CatalogContext(dbOptions);
-            _basketRepository = new IgniteRepository<Basket>(_catalogContext);
+            _basketRepository = new IgniteRepository<Basket>(Ignition.Start());
         }
 
         [Fact]
@@ -32,7 +28,6 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
             var basket = BasketBuilder.WithOneBasketItem();
             var basketService = new BasketService(_basketRepository, null);
             await _basketRepository.AddAsync(basket);
-            _catalogContext.SaveChanges();
 
             await basketService.SetQuantities(BasketBuilder.BasketId, new Dictionary<string, int>() { { BasketBuilder.BasketId.ToString(), 0 } });
 

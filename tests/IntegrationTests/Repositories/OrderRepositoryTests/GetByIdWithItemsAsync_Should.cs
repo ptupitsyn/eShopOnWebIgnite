@@ -5,6 +5,7 @@ using Microsoft.eShopWeb.UnitTests.Builders;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Apache.Ignite.Core;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,18 +13,15 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 {
     public class GetByIdWithItemsAsync_Should
     {
-        private readonly CatalogContext _catalogContext;
+        private readonly IIgnite _catalogContext;
         private readonly OrderRepository _orderRepository;
         private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
         private readonly ITestOutputHelper _output;
         public GetByIdWithItemsAsync_Should(ITestOutputHelper output)
         {
             _output = output;
-            var dbOptions = new DbContextOptionsBuilder<CatalogContext>()
-                .UseInMemoryDatabase(databaseName: "TestCatalog")
-                .Options;
-            _catalogContext = new CatalogContext(dbOptions);
             _orderRepository = new OrderRepository(_catalogContext);
+            _catalogContext =  Ignition.Start(); // TODO: Test ignite config here
         }
 
         [Fact]
@@ -36,17 +34,15 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
             var itemTwoUnits = 5;
 
             var firstOrder = OrderBuilder.WithDefaultValues();
-            _catalogContext.Orders.Add(firstOrder);
+            await _catalogContext.GetRepo<Order>().AddAsync(firstOrder);
             int firstOrderId = firstOrder.Id;
 
             var secondOrderItems = new List<OrderItem>();
             secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemOneUnitPrice, itemOneUnits));
             secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemTwoUnitPrice, itemTwoUnits));
             var secondOrder = OrderBuilder.WithItems(secondOrderItems);
-            _catalogContext.Orders.Add(secondOrder);
+            await _catalogContext.GetRepo<Order>().AddAsync(secondOrder);
             int secondOrderId = secondOrder.Id;
-
-            _catalogContext.SaveChanges();
 
             //Act
             var orderFromRepo = await _orderRepository.GetByIdWithItemsAsync(secondOrderId);

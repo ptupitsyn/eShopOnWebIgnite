@@ -23,7 +23,8 @@ namespace Microsoft.eShopWeb.Web
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
-                    var catalogContext = services.GetRequiredService<CatalogContext>();
+                    // TODO: Seed Ignite
+                    var catalogContext = services.GetRequiredService<object>();
                     await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();

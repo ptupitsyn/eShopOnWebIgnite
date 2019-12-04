@@ -26,15 +26,15 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
                     .AddEntityFrameworkInMemoryDatabase()
                     .BuildServiceProvider();
 
+                // TODO: Add Ignite services
                 // Add a database context (ApplicationDbContext) using an in-memory 
                 // database for testing.
-                services.AddDbContext<CatalogContext>(options =>
-                {
-                    options.UseInMemoryDatabase("InMemoryDbForTesting");
-                    options.UseInternalServiceProvider(provider);
-                });
+//                services.AddDbContext<CatalogContext>(options =>
+//                {
+//                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+//                    options.UseInternalServiceProvider(provider);
+//                });
 
-                // TODO: Add Ignite services
 //                services.AddDbContext<AppIdentityDbContext>(options =>
 //                {
 //                    options.UseInMemoryDatabase("Identity");
@@ -49,19 +49,16 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<CatalogContext>();
                     var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
 
                     var logger = scopedServices
                         .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-                    // Ensure the database is created.
-                    db.Database.EnsureCreated();
-
                     try
                     {
                         // Seed the database with test data.
-                        CatalogContextSeed.SeedAsync(db, loggerFactory).Wait();
+                        // TODO: Pass Ignite
+                        CatalogContextSeed.SeedAsync(null, loggerFactory).Wait();
 
                         // seed sample user data
                         var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();

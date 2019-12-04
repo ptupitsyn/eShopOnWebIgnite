@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.eShopWeb.ApplicationCore.Entities;
+﻿using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Linq;
 
@@ -17,13 +16,14 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
                 query = query.Where(specification.Criteria);
             }
 
+            // TODO: How do we handle expression-based includes?
             // Includes all expression-based includes
-            query = specification.Includes.Aggregate(query,
-                                    (current, include) => current.Include(include));
+            // query = specification.Includes.Aggregate(query,
+            //                        (current, include) => current.Include(include));
 
             // Include any string-based include statements
-            query = specification.IncludeStrings.Aggregate(query,
-                                    (current, include) => current.Include(include));
+            // query = specification.IncludeStrings.Aggregate(query,
+            //                        (current, include) => current.Include(include));
 
             // Apply ordering if expressions are set
             if (specification.OrderBy != null)
