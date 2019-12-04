@@ -16,10 +16,11 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
             var services = new ServiceCollection()
                                 .AddEntityFrameworkInMemoryDatabase();
 
-            services.AddDbContext<AppIdentityDbContext>(options =>
-            {
-                options.UseInMemoryDatabase("Identity");
-            });
+            // TODO: Add Ignite service
+//            services.AddDbContext<AppIdentityDbContext>(options =>
+//            {
+//                options.UseInMemoryDatabase("Identity");
+//            });
             var serviceProvider = new ServiceCollection()
                 .BuildServiceProvider();
 

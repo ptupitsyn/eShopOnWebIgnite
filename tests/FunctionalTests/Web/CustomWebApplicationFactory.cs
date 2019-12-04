@@ -34,11 +34,12 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
                     options.UseInternalServiceProvider(provider);
                 });
 
-                services.AddDbContext<AppIdentityDbContext>(options =>
-                {
-                    options.UseInMemoryDatabase("Identity");
-                    options.UseInternalServiceProvider(provider);
-                });
+                // TODO: Add Ignite services
+//                services.AddDbContext<AppIdentityDbContext>(options =>
+//                {
+//                    options.UseInMemoryDatabase("Identity");
+//                    options.UseInternalServiceProvider(provider);
+//                });
 
                 // Build the service provider.
                 var sp = services.BuildServiceProvider();
