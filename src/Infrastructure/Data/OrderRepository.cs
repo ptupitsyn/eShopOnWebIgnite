@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data
 {
-    public class OrderRepository : EfRepository<Order>, IOrderRepository
+    public class OrderRepository : IgniteRepository<Order>, IOrderRepository
     {
         public OrderRepository(CatalogContext dbContext) : base(dbContext)
         {

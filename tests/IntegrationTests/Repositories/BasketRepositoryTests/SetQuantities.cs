@@ -23,7 +23,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
                 .UseInMemoryDatabase(databaseName: "TestCatalog")
                 .Options;
             _catalogContext = new CatalogContext(dbOptions);
-            _basketRepository = new EfRepository<Basket>(_catalogContext);
+            _basketRepository = new IgniteRepository<Basket>(_catalogContext);
         }
 
         [Fact]

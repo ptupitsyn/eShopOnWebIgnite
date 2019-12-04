@@ -48,7 +48,7 @@ namespace Microsoft.eShopWeb.Web
 
             services.AddMediatR(typeof(BasketViewModelService).Assembly);
 
-            services.AddScoped(typeof(IAsyncRepository<>), typeof(EfRepository<>));
+            services.AddScoped(typeof(IAsyncRepository<>), typeof(IgniteRepository<>));
             services.AddScoped<ICatalogViewModelService, CachedCatalogViewModelService>();
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IBasketViewModelService, BasketViewModelService>();

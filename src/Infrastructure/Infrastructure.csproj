@@ -6,14 +6,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Apache.Ignite" Version="2.8.0-alpha20191203" />
+		<PackageReference Include="Apache.Ignite.Linq" Version="2.8.0-alpha20191203" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" PrivateAssets="All" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\ApplicationCore\ApplicationCore.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Data\Migrations\" />
 	</ItemGroup>
 </Project>

@@ -9,9 +9,11 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 {
     public class CatalogContextSeed
     {
-        public static async Task SeedAsync(CatalogContext catalogContext,
+        public static async Task SeedAsync(object catalogContext,
             ILoggerFactory loggerFactory, int? retry = 0)
         {
+            // TODO: Seed data to Ignite
+            /*
             int retryForAvailability = retry.Value;
             try
             {
@@ -52,6 +54,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
                     await SeedAsync(catalogContext, loggerFactory, retryForAvailability);
                 }
             }
+            */
         }
 
         static IEnumerable<CatalogBrand> GetPreconfiguredCatalogBrands()
