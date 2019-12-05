@@ -12,17 +12,18 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate
 
         public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1)
         {
-            if (!Items.Any(i => i.CatalogItemId == catalogItemId))
+            var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
+            if (existingItem == null)
             {
-                _items.Add(new BasketItem()
+                _items.Add(new BasketItem
                 {
                     CatalogItemId = catalogItemId,
                     Quantity = quantity,
-                    UnitPrice = unitPrice
+                    UnitPrice = unitPrice,
+                    BasketId = Id
                 });
                 return;
             }
-            var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
             existingItem.Quantity += quantity;
         }
 

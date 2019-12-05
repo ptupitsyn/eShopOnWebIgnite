@@ -32,8 +32,9 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
             var basketService = new BasketService(_basketRepository, null);
             await _basketRepository.AddAsync(basket);
 
-            await basketService.SetQuantities(_basketBuilder.BasketId, new Dictionary<string, int>() { { _basketBuilder.BasketId.ToString(), 0 } });
+            await basketService.SetQuantities(_basketBuilder.BasketId, new Dictionary<string, int> { { "0", 0 } });
 
+            basket = await _basketRepository.GetByIdAsync(basket.Id);
             Assert.Equal(0, basket.Items.Count);
         }
 

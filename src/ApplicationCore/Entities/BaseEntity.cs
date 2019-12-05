@@ -4,6 +4,7 @@
     // Using non-generic integer types for simplicity and to ease caching logic
     public class BaseEntity
     {
+        // TODO: Guids
         public int Id { get; set; }
     }
 }
