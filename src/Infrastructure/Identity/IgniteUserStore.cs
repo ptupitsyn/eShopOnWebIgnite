@@ -4,21 +4,21 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Microsoft.eShopWeb.Infrastructure.Identity
 {
-    public class IgniteUserStore : IUserStore<ApplicationUser>
+    public class IgniteUserStore : IUserPasswordStore<ApplicationUser>
     {
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            // No-op.
         }
 
         public Task<string> GetUserIdAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(user.Id);
         }
 
         public Task<string> GetUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(user.UserName);
         }
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
@@ -59,6 +59,22 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
             throw new System.NotImplementedException();
+        }
+
+        public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
+        {
+            user.PasswordHash = passwordHash;
+            return Task.CompletedTask;
+        }
+
+        public Task<string> GetPasswordHashAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(user.PasswordHash);
+        }
+
+        public Task<bool> HasPasswordAsync(ApplicationUser user, CancellationToken cancellationToken)
+        {
+            return Task.FromResult<bool>(!string.IsNullOrWhiteSpace(user.PasswordHash));
         }
     }
 }

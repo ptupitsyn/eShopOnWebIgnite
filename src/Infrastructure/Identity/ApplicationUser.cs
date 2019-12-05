@@ -15,5 +15,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
         public bool EmailConfirmed { get; set; }
         
         public bool TwoFactorEnabled { get; set; }
+        
+        public string PasswordHash { get; set; }
     }
 }
