@@ -15,6 +15,8 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         public Task<Order> GetByIdWithItemsAsync(int id)
         {
             // TODO: Load OrderItems and ItemOrdered from passed Ignite instance
+            // TODO: Do we even need this? We can store Orders as full objects in a single table
+            // See how usages work. Tests are already green :)
             var order = GetByIdAsync(id);
             return order;
 
