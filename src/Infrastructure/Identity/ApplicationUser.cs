@@ -17,5 +17,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
         public bool TwoFactorEnabled { get; set; }
         
         public string PasswordHash { get; set; }
+        
+        public string NormalizedUserName { get; set; }
     }
 }

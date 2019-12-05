@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,44 +34,50 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
 
         public Task SetUserNameAsync(ApplicationUser user, string userName, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            user.UserName = userName;
+            return Task.CompletedTask;
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(user.NormalizedUserName);
         }
 
         public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            user.NormalizedUserName = normalizedName;
+            return Task.CompletedTask;
         }
 
-        public Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            user.Id = Guid.NewGuid().ToString();
+            await GetCache().PutAsync(user.Id, user);
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> UpdateAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            await GetCache().PutAsync(user.Id, user);
+            return IdentityResult.Success;
         }
 
-        public Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken)
+        public async Task<IdentityResult> DeleteAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            await GetCache().RemoveAsync(user.Id);
+            return IdentityResult.Success;
         }
 
         public Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            return _ignite.GetCache<string, ApplicationUser>().GetAsync(userId);
+            return GetCache().GetAsync(userId);
         }
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = _ignite.GetCache<string, ApplicationUser>()
+            var user = GetCache()
                 .AsQueryable()
-                .Single(u => u.UserName == normalizedUserName);
+                .SingleOrDefault(u => u.NormalizedUserName == normalizedUserName);
             
             return Task.FromResult(user);
         }
@@ -88,7 +95,12 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
 
         public Task<bool> HasPasswordAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult<bool>(!string.IsNullOrWhiteSpace(user.PasswordHash));
+            return Task.FromResult(!string.IsNullOrWhiteSpace(user.PasswordHash));
+        }
+        
+        private IIgniteCacheAdapter<string, ApplicationUser> GetCache()
+        {
+            return _ignite.GetCache<string, ApplicationUser>();
         }
     }
 }

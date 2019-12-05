@@ -15,9 +15,10 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Ignite
             _cache = cache;
         }
 
-        public Task<TV> GetAsync(TK id)
+        public async Task<TV> GetAsync(TK id)
         {
-            return _cache.GetAsync(id);
+            var res = await _cache.TryGetAsync(id);
+            return res.Value;
         }
 
         public Task<IReadOnlyList<TV>> ListAllAsync()
