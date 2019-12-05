@@ -1,5 +1,3 @@
-using Apache.Ignite.Core;
-using Apache.Ignite.Core.Cache;
 using Apache.Ignite.Core.Cache.Configuration;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -9,16 +7,15 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 {
     public static class IgniteExtensions
     {
-        public static IIgniteCacheAdapter<int, TEntity> GetCache<TEntity>(this IIgniteAdapter ignite) 
-            where TEntity : BaseEntity, IAggregateRoot
+        public static IIgniteCacheAdapter<TK, TV> GetCache<TK, TV>(this IIgniteAdapter ignite) 
         {
             // TODO: Sql config
             var cfg = new CacheConfiguration
             {
-                Name = typeof(TEntity).FullName
+                Name = typeof(TV).FullName
             };
             
-            return ignite.GetOrCreateCache<int, TEntity>(cfg);
+            return ignite.GetOrCreateCache<TK, TV>(cfg);
         }
 
         public static IAsyncRepository<TEntity> GetRepo<TEntity>(this IIgniteAdapter ignite) 

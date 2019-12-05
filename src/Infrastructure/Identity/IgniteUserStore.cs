@@ -1,11 +1,21 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.eShopWeb.Infrastructure.Data;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Infrastructure.Identity
 {
     public class IgniteUserStore : IUserPasswordStore<ApplicationUser>
     {
+        private readonly IIgniteAdapter _ignite;
+
+        public IgniteUserStore(IIgniteAdapter ignite)
+        {
+            _ignite = ignite;
+        }
+
         public void Dispose()
         {
             // No-op.
@@ -53,12 +63,16 @@ namespace Microsoft.eShopWeb.Infrastructure.Identity
 
         public Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return _ignite.GetCache<string, ApplicationUser>().GetAsync(userId);
         }
 
         public Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var user = _ignite.GetCache<string, ApplicationUser>()
+                .AsQueryable()
+                .Single(u => u.UserName == normalizedUserName);
+            
+            return Task.FromResult(user);
         }
 
         public Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)

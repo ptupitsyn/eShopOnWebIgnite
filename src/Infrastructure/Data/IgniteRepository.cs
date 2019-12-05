@@ -22,7 +22,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
         public IgniteRepository(IIgniteAdapter ignite)
         {
-            _cache = ignite.GetCache<T>();
+            _cache = ignite.GetCache<int, T>();
         }
 
         public virtual async Task<T> GetByIdAsync(int id)
