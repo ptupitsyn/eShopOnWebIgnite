@@ -3,8 +3,10 @@ using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.eShopWeb.Infrastructure.Identity;
 using System;
+using System.Net.Http;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
@@ -42,6 +44,10 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
             await AppIdentityDbContextSeed.SeedAsync(userManager);
 
             var signInManager = scopedServices.GetRequiredService<SignInManager<ApplicationUser>>();
+            signInManager.Context = new DefaultHttpContext
+            {
+                RequestServices = scopedServices
+            };
 
             var email = "demouser@microsoft.com";
             var password = "Pass@word1";
