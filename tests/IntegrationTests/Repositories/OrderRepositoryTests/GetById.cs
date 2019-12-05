@@ -20,7 +20,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
         public GetById(ITestOutputHelper output)
         {
             _output = output;
-            _catalogContext = new IgniteAdapter(Ignition.Start()); // TODO: Test ignite config here
+            _catalogContext = TestUtils.GetIgnite();
             _orderRepository = new OrderRepository(_catalogContext);
         }
 

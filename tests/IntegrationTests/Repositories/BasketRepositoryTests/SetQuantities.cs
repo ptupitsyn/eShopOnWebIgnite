@@ -20,7 +20,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
 
         public SetQuantities()
         {
-            _basketRepository = new IgniteRepository<Basket>(new IgniteAdapter(Ignition.Start()));
+            _basketRepository = new IgniteRepository<Basket>(TestUtils.GetIgnite());
         }
 
         [Fact]
