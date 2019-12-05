@@ -28,6 +28,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
                 .AddLogging()
                 .AddIdentity<ApplicationUser, IdentityRole>()
                 .AddUserStore<IgniteUserStore>()
+                .AddRoleStore<IgniteRoleStore>()
                 .AddDefaultTokenProviders();
 
             var serviceProvider = services.BuildServiceProvider();
