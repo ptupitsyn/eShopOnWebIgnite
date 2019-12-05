@@ -1,7 +1,6 @@
 ﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Threading.Tasks;
-using Apache.Ignite.Core;
 using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data

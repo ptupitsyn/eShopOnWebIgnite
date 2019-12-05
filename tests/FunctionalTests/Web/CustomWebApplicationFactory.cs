@@ -19,12 +19,8 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
         {
             builder.ConfigureServices(services =>
             {
-                 services.AddEntityFrameworkInMemoryDatabase();
-
                 // Create a new service provider.
-                var provider = services
-                    .AddEntityFrameworkInMemoryDatabase()
-                    .BuildServiceProvider();
+                var provider = services.BuildServiceProvider();
 
                 // TODO: Add Ignite services
                 // Add a database context (ApplicationDbContext) using an in-memory 

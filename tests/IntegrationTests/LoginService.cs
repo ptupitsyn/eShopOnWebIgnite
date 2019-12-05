@@ -13,8 +13,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
         [Fact]
         public async Task LogsInSampleUser()
         {
-            var services = new ServiceCollection()
-                                .AddEntityFrameworkInMemoryDatabase();
+            var services = new ServiceCollection();
 
             // TODO: Add Ignite service
 //            services.AddDbContext<AppIdentityDbContext>(options =>
