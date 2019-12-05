@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Apache.Ignite.Core.Cache.Configuration;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
@@ -9,10 +13,16 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
     {
         public static IIgniteCacheAdapter<TK, TV> GetCache<TK, TV>(this IIgniteAdapter ignite) 
         {
-            // TODO: Sql config
             var cfg = new CacheConfiguration
             {
-                Name = typeof(TV).FullName
+                Name = typeof(TV).FullName,
+                QueryEntities = new[]
+                {
+                    new QueryEntity(typeof(TK), typeof(TV))
+                    {
+                        Fields = GetFields<TV>().ToArray()
+                    }, 
+                }
             };
             
             return ignite.GetOrCreateCache<TK, TV>(cfg);
@@ -22,6 +32,26 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
             where TEntity : BaseEntity, IAggregateRoot
         {
             return new IgniteRepository<TEntity>(ignite);
+        }
+        
+        private static IEnumerable<QueryField> GetFields<T>()
+        {
+            return GetSelfAndBaseTypes(typeof(T))
+                .SelectMany(t => t.GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                .Select(p => new QueryField(p.Name, p.PropertyType));
+        }
+
+        /// <summary>
+        /// Returns full type hierarchy.
+        /// </summary>
+        private static IEnumerable<Type> GetSelfAndBaseTypes(Type type)
+        {
+            while (type != typeof(object) && type != null)
+            {
+                yield return type;
+
+                type = type.BaseType;
+            }
         }
     }
 }
