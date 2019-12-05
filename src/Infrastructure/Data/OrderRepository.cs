@@ -2,12 +2,13 @@
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data
 {
     public class OrderRepository : IgniteRepository<Order>, IOrderRepository
     {
-        public OrderRepository(IIgnite ignite) : base(ignite)
+        public OrderRepository(IIgniteAdapter ignite) : base(ignite)
         {
         }
 

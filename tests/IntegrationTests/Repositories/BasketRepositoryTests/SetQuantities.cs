@@ -7,6 +7,7 @@ using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Services;
 using Microsoft.eShopWeb.Infrastructure.Data;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 using Microsoft.eShopWeb.UnitTests.Builders;
 using Xunit;
 
@@ -19,7 +20,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
 
         public SetQuantities()
         {
-            _basketRepository = new IgniteRepository<Basket>(Ignition.Start());
+            _basketRepository = new IgniteRepository<Basket>(new IgniteAdapter(Ignition.Start()));
         }
 
         [Fact]

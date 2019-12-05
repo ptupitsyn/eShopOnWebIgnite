@@ -7,19 +7,20 @@ using Xunit.Abstractions;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 {
     public class GetById
     {
-        private readonly IIgnite _catalogContext;
+        private readonly IIgniteAdapter _catalogContext;
         private readonly OrderRepository _orderRepository;
         private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
         private readonly ITestOutputHelper _output;
         public GetById(ITestOutputHelper output)
         {
             _output = output;
-            _catalogContext =  Ignition.Start(); // TODO: Test ignite config here
+            _catalogContext = new IgniteAdapter(Ignition.Start()); // TODO: Test ignite config here
             _orderRepository = new OrderRepository(_catalogContext);
         }
 

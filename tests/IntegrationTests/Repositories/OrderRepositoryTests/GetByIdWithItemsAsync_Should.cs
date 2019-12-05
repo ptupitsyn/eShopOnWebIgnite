@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,15 +14,15 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 {
     public class GetByIdWithItemsAsync_Should
     {
-        private readonly IIgnite _catalogContext;
+        private readonly IIgniteAdapter _catalogContext;
         private readonly OrderRepository _orderRepository;
         private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
         private readonly ITestOutputHelper _output;
         public GetByIdWithItemsAsync_Should(ITestOutputHelper output)
         {
             _output = output;
+            _catalogContext = new IgniteAdapter(Ignition.Start()); // TODO: Test ignite config here
             _orderRepository = new OrderRepository(_catalogContext);
-            _catalogContext =  Ignition.Start(); // TODO: Test ignite config here
         }
 
         [Fact]

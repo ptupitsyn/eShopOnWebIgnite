@@ -4,10 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Apache.Ignite.Core;
-using Apache.Ignite.Core.Cache;
-using Apache.Ignite.Core.Cache.Configuration;
-using Apache.Ignite.Linq;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Infrastructure.Data
 {
@@ -18,11 +15,12 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
     /// <typeparam name="T"></typeparam>
     public class IgniteRepository<T> : IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
     {
+        // ReSharper disable once StaticMemberInGenericType (intended)
         private static int _id;
         
-        protected readonly ICache<int, T> _cache;
+        protected readonly IIgniteCacheAdapter<int, T> _cache;
 
-        public IgniteRepository(IIgnite ignite)
+        public IgniteRepository(IIgniteAdapter ignite)
         {
             _cache = ignite.GetCache<T>();
         }
@@ -34,7 +32,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
         public Task<IReadOnlyList<T>> ListAllAsync()
         {
-            return Task.FromResult((IReadOnlyList<T>) _cache.ToList());
+            return _cache.ListAllAsync();
         }
 
         public Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
@@ -68,7 +66,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
-            return SpecificationEvaluator<T>.GetQuery(_cache.AsCacheQueryable().Select(e => e.Value), spec);
+            return SpecificationEvaluator<T>.GetQuery(_cache.AsQueryable(), spec);
         }
     }
 }
