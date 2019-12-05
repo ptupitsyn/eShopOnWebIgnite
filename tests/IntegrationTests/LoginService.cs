@@ -5,52 +5,54 @@ using Microsoft.eShopWeb.Infrastructure.Identity;
 using System;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 {
-    public class LoginService
+    public class LoginService : IDisposable
     {
+        private IIgniteAdapter _ignite;
+
+        public LoginService()
+        {
+            _ignite = TestUtils.GetIgnite();
+        }
+        
         [Fact]
         public async Task LogsInSampleUser()
         {
             var services = new ServiceCollection();
+                
+            services
+                .AddSingleton(_ignite)
+                .AddLogging()
+                .AddIdentity<ApplicationUser, IdentityRole>()
+                .AddUserStore<IgniteUserStore>()
+                .AddDefaultTokenProviders();
 
-            // TODO: Add Ignite service
-//            services.AddDbContext<AppIdentityDbContext>(options =>
-//            {
-//                options.UseInMemoryDatabase("Identity");
-//            });
-            var serviceProvider = new ServiceCollection()
-                .BuildServiceProvider();
+            var serviceProvider = services.BuildServiceProvider();
 
-            // Create a scope to obtain a reference to the database
-            // context (AppIdentityDbContext).
-            using (var scope = serviceProvider.CreateScope())
-            {
-                var scopedServices = scope.ServiceProvider;
+            using var scope = serviceProvider.CreateScope();
+            var scopedServices = scope.ServiceProvider;
 
-                try
-                {
-                    // seed sample user data
-                    var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();
+            // seed sample user data
+            var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();
 
-                    AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
+            await AppIdentityDbContextSeed.SeedAsync(userManager);
 
-                    var signInManager = scopedServices.GetRequiredService<SignInManager<ApplicationUser>>();
+            var signInManager = scopedServices.GetRequiredService<SignInManager<ApplicationUser>>();
 
-                    var email = "demouser@microsoft.com";
-                    var password = "Pass@word1";
+            var email = "demouser@microsoft.com";
+            var password = "Pass@word1";
 
-                    var result = await signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
+            var result = await signInManager.PasswordSignInAsync(email, password, false, lockoutOnFailure: false);
 
-                    Assert.True(result.Succeeded);
+            Assert.True(result.Succeeded);
+        }
 
-                }
-                catch (Exception)
-                {
-                }
-            }
-
+        public void Dispose()
+        {
+            _ignite?.Dispose();
         }
     }
 }
