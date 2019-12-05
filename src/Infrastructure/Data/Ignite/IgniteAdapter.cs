@@ -17,5 +17,10 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Ignite
             var cache = _ignite.GetOrCreateCache<TK, TV>(cfg);
             return new IgniteCacheAdapter<TK, TV>(cache);
         }
+
+        public void Dispose()
+        {
+            _ignite?.Dispose();
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.Infrastructure.Data;
+﻿using System;
+using Microsoft.eShopWeb.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.eShopWeb.UnitTests.Builders;
@@ -11,12 +12,13 @@ using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 {
-    public class GetById
+    public class GetById : IDisposable
     {
         private readonly IIgniteAdapter _catalogContext;
         private readonly OrderRepository _orderRepository;
         private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
         private readonly ITestOutputHelper _output;
+        
         public GetById(ITestOutputHelper output)
         {
             _output = output;
@@ -38,6 +40,11 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
             // Note: Using InMemoryDatabase OrderItems is available. Will be null if using SQL DB.
             var firstItem = orderFromRepo.OrderItems.FirstOrDefault();
             Assert.Equal(OrderBuilder.TestUnits, firstItem.Units);
+        }
+
+        public void Dispose()
+        {
+            _catalogContext.Dispose();
         }
     }
 }
