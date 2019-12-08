@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using System.Collections.Generic;
 
 namespace Microsoft.eShopWeb.UnitTests.Builders
@@ -7,7 +8,7 @@ namespace Microsoft.eShopWeb.UnitTests.Builders
     {
         private Order _order;
         public string TestBuyerId => "12345";
-        public int TestCatalogItemId => 234;
+        public Guid TestCatalogItemId { get; } = Guid.NewGuid();
         public string TestProductName => "Test Product Name";
         public string TestPictureUri => "http://test.com/image.jpg";
         public decimal TestUnitPrice = 1.23m;

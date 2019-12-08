@@ -29,13 +29,13 @@ namespace Microsoft.eShopWeb.UnitTests
 
         public List<CatalogItem> GetTestItemCollection()
         {
-            return new List<CatalogItem>()
+            return new List<CatalogItem>
             {
-                new CatalogItem() { Id = 1, CatalogBrandId = 1, CatalogTypeId= 1 },
-                new CatalogItem() { Id = 2, CatalogBrandId = 1, CatalogTypeId= 2 },
-                new CatalogItem() { Id = 3, CatalogBrandId = 1, CatalogTypeId= 3 },
-                new CatalogItem() { Id = 4, CatalogBrandId = 2, CatalogTypeId= 1 },
-                new CatalogItem() { Id = 5, CatalogBrandId = 2, CatalogTypeId= 2 },
+                new CatalogItem { CatalogBrandId = 1, CatalogTypeId= 1 },
+                new CatalogItem { CatalogBrandId = 1, CatalogTypeId= 2 },
+                new CatalogItem { CatalogBrandId = 1, CatalogTypeId= 3 },
+                new CatalogItem { CatalogBrandId = 2, CatalogTypeId= 1 },
+                new CatalogItem { CatalogBrandId = 2, CatalogTypeId= 2 },
             };
         }
     }

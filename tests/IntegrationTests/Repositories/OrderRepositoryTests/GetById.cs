@@ -31,7 +31,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
         {
             var existingOrder = OrderBuilder.WithDefaultValues();
             await _catalogContext.GetRepo<Order>().AddAsync(existingOrder);
-            int orderId = existingOrder.Id;
+            var orderId = existingOrder.Id;
             _output.WriteLine($"OrderId: {orderId}");
 
             var orderFromRepo = await _orderRepository.GetByIdAsync(orderId);

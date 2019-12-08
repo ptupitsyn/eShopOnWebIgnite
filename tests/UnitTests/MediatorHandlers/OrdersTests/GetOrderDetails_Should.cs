@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Web.Features.OrderDetails;
 using Moq;
@@ -15,7 +16,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
 
         public GetOrderDetails_Should()
         {
-            var item = new OrderItem(new CatalogItemOrdered(1, "ProductName", "URI"), 10.00m, 10);
+            var item = new OrderItem(new CatalogItemOrdered(Guid.NewGuid(), "ProductName", "URI"), 10.00m, 10);
             var address = new Address(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>());
             Order order = new Order("buyerId", address, new List<OrderItem> { item });
 
@@ -26,7 +27,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
         [Fact]
         public async Task NotBeNull_If_Order_Exists()
         {
-            var request = new GetOrderDetails("SomeUserName", 0);
+            var request = new GetOrderDetails("SomeUserName", Guid.NewGuid());
 
             var handler = new GetOrderDetailsHandler(_mockOrderRepository.Object);
 
@@ -38,7 +39,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
         [Fact]
         public async Task BeNull_If_Order_Not_found()
         {
-            var request = new GetOrderDetails("SomeUserName", 100);
+            var request = new GetOrderDetails("SomeUserName", Guid.NewGuid());
 
             var handler = new GetOrderDetailsHandler(_mockOrderRepository.Object);
 

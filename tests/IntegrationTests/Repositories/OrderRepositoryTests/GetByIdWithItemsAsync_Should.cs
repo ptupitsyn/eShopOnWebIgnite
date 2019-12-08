@@ -38,14 +38,14 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
 
             var firstOrder = OrderBuilder.WithDefaultValues();
             await _catalogContext.GetRepo<Order>().AddAsync(firstOrder);
-            int firstOrderId = firstOrder.Id;
+            var firstOrderId = firstOrder.Id;
 
             var secondOrderItems = new List<OrderItem>();
             secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemOneUnitPrice, itemOneUnits));
             secondOrderItems.Add(new OrderItem(OrderBuilder.TestCatalogItemOrdered, itemTwoUnitPrice, itemTwoUnits));
             var secondOrder = OrderBuilder.WithItems(secondOrderItems);
             await _catalogContext.GetRepo<Order>().AddAsync(secondOrder);
-            int secondOrderId = secondOrder.Id;
+            var secondOrderId = secondOrder.Id;
 
             //Act
             var orderFromRepo = await _orderRepository.GetByIdWithItemsAsync(secondOrderId);
@@ -55,8 +55,8 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
             Assert.Equal(secondOrder.OrderItems.Count, orderFromRepo.OrderItems.Count);
             Assert.Equal(1, orderFromRepo.OrderItems.Count(x => x.UnitPrice == itemOneUnitPrice));
             Assert.Equal(1, orderFromRepo.OrderItems.Count(x => x.UnitPrice == itemTwoUnitPrice));
-            Assert.Equal(itemOneUnits, orderFromRepo.OrderItems.SingleOrDefault(x => x.UnitPrice == itemOneUnitPrice).Units);
-            Assert.Equal(itemTwoUnits, orderFromRepo.OrderItems.SingleOrDefault(x => x.UnitPrice == itemTwoUnitPrice).Units);
+            Assert.Equal(itemOneUnits, orderFromRepo.OrderItems.Single(x => x.UnitPrice == itemOneUnitPrice).Units);
+            Assert.Equal(itemTwoUnits, orderFromRepo.OrderItems.Single(x => x.UnitPrice == itemTwoUnitPrice).Units);
         }
 
         public void Dispose()

@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Web.Features.MyOrders;
 using Moq;
@@ -15,7 +16,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
 
         public GetMyOrders_Should()
         {
-            var item = new OrderItem(new CatalogItemOrdered(1, "ProductName", "URI"), 10.00m, 10);
+            var item = new OrderItem(new CatalogItemOrdered(Guid.NewGuid(), "ProductName", "URI"), 10.00m, 10);
             var address = new Address(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>());
             Order order = new Order("buyerId", address, new List<OrderItem> { item });
 

@@ -11,7 +11,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Services.BasketServiceTes
 {
     public class SetQuantities
     {
-        private readonly int _invalidId = -1;
+        private readonly Guid _invalidId = Guid.Empty;
         private readonly Mock<IAsyncRepository<Basket>> _mockBasketRepo;
 
         public SetQuantities()
@@ -34,7 +34,7 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Services.BasketServiceTes
             var basketService = new BasketService(null, null);
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await basketService.SetQuantities(123, null));
+                await basketService.SetQuantities(Guid.NewGuid(), null));
         }
 
     }

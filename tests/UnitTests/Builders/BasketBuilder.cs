@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 
 namespace Microsoft.eShopWeb.UnitTests.Builders
 {
@@ -6,7 +7,7 @@ namespace Microsoft.eShopWeb.UnitTests.Builders
     {
         private Basket _basket;
         public string BasketBuyerId => "testbuyerId@test.com";
-        public int BasketId => 1;
+        public Guid BasketId { get; } = Guid.NewGuid();
 
         public BasketBuilder()
         {
@@ -27,7 +28,7 @@ namespace Microsoft.eShopWeb.UnitTests.Builders
         public Basket WithOneBasketItem()
         {
             _basket = new Basket { BuyerId = BasketBuyerId, Id = BasketId };
-            _basket.AddItem(2, 3.40m, 4);
+            _basket.AddItem(Guid.NewGuid(), 3.40m, 4);
             return _basket;
         }
     }

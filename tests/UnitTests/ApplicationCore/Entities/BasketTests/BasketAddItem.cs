@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using System.Linq;
 using Xunit;
 
@@ -6,9 +7,9 @@ namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Entities.BasketTests
 {
     public class BasketAddItem
     {
-        private int _testCatalogItemId = 123;
-        private decimal _testUnitPrice = 1.23m;
-        private int _testQuantity = 2;
+        private readonly Guid _testCatalogItemId = Guid.NewGuid();
+        private readonly decimal _testUnitPrice = 1.23m;
+        private readonly int _testQuantity = 2;
 
         [Fact]
         public void AddsBasketItemIfNotPresent()

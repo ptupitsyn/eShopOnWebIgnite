@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Specifications;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Specifications;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ namespace Microsoft.eShopWeb.UnitTests
 {
     public class BasketWithItems
     {
-        private int _testBasketId = 123;
+        private readonly Guid _testBasketId = Guid.NewGuid();
 
         [Fact]
         public void MatchesBasketWithGivenId()
@@ -27,7 +28,7 @@ namespace Microsoft.eShopWeb.UnitTests
         [Fact]
         public void MatchesNoBasketsIfIdNotPresent()
         {
-            int badId = -1;
+            var badId = Guid.Empty;
             var spec = new BasketWithItemsSpecification(badId);
 
             Assert.False(GetTestBasketCollection()
@@ -37,11 +38,11 @@ namespace Microsoft.eShopWeb.UnitTests
 
         public List<Basket> GetTestBasketCollection()
         {
-            return new List<Basket>()
+            return new List<Basket>
             {
-                new Basket() { Id = 1 },
-                new Basket() { Id = 2 },
-                new Basket() { Id = _testBasketId }
+                new Basket(),
+                new Basket(),
+                new Basket { Id = _testBasketId }
             };
         }
     }
