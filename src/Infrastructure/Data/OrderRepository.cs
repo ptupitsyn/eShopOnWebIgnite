@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Threading.Tasks;
 using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
@@ -11,7 +12,7 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         {
         }
 
-        public Task<Order> GetByIdWithItemsAsync(int id)
+        public Task<Order> GetByIdWithItemsAsync(Guid id)
         {
             // TODO: Load OrderItems and ItemOrdered from passed Ignite instance
             // TODO: Do we even need this? We can store Orders as full objects in a single table

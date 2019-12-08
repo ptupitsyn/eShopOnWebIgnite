@@ -1,8 +1,10 @@
-﻿namespace Microsoft.eShopWeb.Web.ViewModels
+﻿using System;
+
+namespace Microsoft.eShopWeb.Web.ViewModels
 {
     public class OrderItemViewModel
     {
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal Discount => 0;

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.eShopWeb.Web.Features.MyOrders;
@@ -27,8 +28,8 @@ namespace Microsoft.eShopWeb.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpGet("{orderId}")]
-        public async Task<IActionResult> Detail(int orderId)
+        [HttpGet("{orderId:Guid}")]
+        public async Task<IActionResult> Detail(Guid orderId)
         {
             var viewModel = await _mediator.Send(new GetOrderDetails(User.Identity.Name, orderId));
 

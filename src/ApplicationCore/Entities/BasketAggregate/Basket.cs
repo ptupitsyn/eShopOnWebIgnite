@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +11,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate
         private readonly List<BasketItem> _items = new List<BasketItem>();
         public IReadOnlyCollection<BasketItem> Items => _items.AsReadOnly();
 
-        public void AddItem(int catalogItemId, decimal unitPrice, int quantity = 1)
+        public void AddItem(Guid catalogItemId, decimal unitPrice, int quantity = 1)
         {
             var existingItem = Items.FirstOrDefault(i => i.CatalogItemId == catalogItemId);
             if (existingItem == null)

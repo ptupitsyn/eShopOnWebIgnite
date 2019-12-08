@@ -8,7 +8,7 @@ namespace Microsoft.eShopWeb.Web.ViewModels
     {
         private const string DEFAULT_STATUS = "Pending";
 
-        public int OrderNumber { get; set; }
+        public Guid OrderNumber { get; set; }
         public DateTimeOffset OrderDate { get; set; }
         public decimal Total { get; set; }
         public string Status => DEFAULT_STATUS;

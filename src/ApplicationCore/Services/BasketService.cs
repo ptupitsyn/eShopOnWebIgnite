@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
@@ -20,7 +21,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             _logger = logger;
         }
 
-        public async Task AddItemToBasket(int basketId, int catalogItemId, decimal price, int quantity = 1)
+        public async Task AddItemToBasket(Guid basketId, Guid catalogItemId, decimal price, int quantity = 1)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
 
@@ -29,7 +30,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             await _basketRepository.UpdateAsync(basket);
         }
 
-        public async Task DeleteBasketAsync(int basketId)
+        public async Task DeleteBasketAsync(Guid basketId)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
             await _basketRepository.DeleteAsync(basket);
@@ -50,7 +51,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             return count;
         }
 
-        public async Task SetQuantities(int basketId, Dictionary<string, int> quantities)
+        public async Task SetQuantities(Guid basketId, Dictionary<string, int> quantities)
         {
             Guard.Against.Null(quantities, nameof(quantities));
             var basket = await _basketRepository.GetByIdAsync(basketId);

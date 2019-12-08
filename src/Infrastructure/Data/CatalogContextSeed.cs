@@ -20,10 +20,10 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
         private static async Task SeedAsync<T>(IIgniteAdapter catalogContext, IEnumerable<T> data)
             where T : BaseEntity
         {
-            var brands = catalogContext.GetCache<int, T>();
-            if (brands.GetSize() == 0)
+            var cache = catalogContext.GetCache<Guid, T>();
+            if (cache.GetSize() == 0)
             {
-                await brands.PutAllAsync(data.Select(b => new KeyValuePair<int, T>(b.Id, b)));
+                await cache.PutAllAsync(data.Select(b => new KeyValuePair<Guid, T>(b.Id, b)));
             }
         }
 

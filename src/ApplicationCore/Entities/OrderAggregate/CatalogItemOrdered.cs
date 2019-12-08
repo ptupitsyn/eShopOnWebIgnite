@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
+using Ardalis.GuardClauses;
 
 namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
 {
@@ -8,9 +9,8 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
     /// </summary>
     public class CatalogItemOrdered // ValueObject
     {
-        public CatalogItemOrdered(int catalogItemId, string productName, string pictureUri)
+        public CatalogItemOrdered(Guid catalogItemId, string productName, string pictureUri)
         {
-            Guard.Against.OutOfRange(catalogItemId, nameof(catalogItemId), 1, int.MaxValue);
             Guard.Against.NullOrEmpty(productName, nameof(productName));
             Guard.Against.NullOrEmpty(pictureUri, nameof(pictureUri));
 
@@ -24,7 +24,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate
             // required by EF
         }
 
-        public int CatalogItemId { get; private set; }
+        public Guid CatalogItemId { get; private set; }
         public string ProductName { get; private set; }
         public string PictureUri { get; private set; }
     }

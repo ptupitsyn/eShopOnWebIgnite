@@ -4,7 +4,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Exceptions
 {
     public class BasketNotFoundException : Exception
     {
-        public BasketNotFoundException(int basketId) : base($"No basket found with id {basketId}")
+        public BasketNotFoundException(Guid basketId) : base($"No basket found with id {basketId}")
         {
         }
 

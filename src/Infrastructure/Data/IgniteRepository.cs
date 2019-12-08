@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,17 +16,14 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
     /// <typeparam name="T"></typeparam>
     public class IgniteRepository<T> : IAsyncRepository<T> where T : BaseEntity, IAggregateRoot
     {
-        // ReSharper disable once StaticMemberInGenericType (intended)
-        private static int _id;
-        
-        protected readonly IIgniteCacheAdapter<int, T> _cache;
+        protected readonly IIgniteCacheAdapter<Guid, T> _cache;
 
         public IgniteRepository(IIgniteAdapter ignite)
         {
-            _cache = ignite.GetCache<int, T>();
+            _cache = ignite.GetCache<Guid, T>();
         }
 
-        public virtual async Task<T> GetByIdAsync(int id)
+        public virtual async Task<T> GetByIdAsync(Guid id)
         {
             return await _cache.GetAsync(id);
         }
@@ -47,9 +45,6 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
 
         public async Task<T> AddAsync(T entity)
         {
-            // Generate ID
-            // TODO: Use Ignite sequence
-            entity.Id = Interlocked.Increment(ref _id);
             await _cache.PutAsync(entity.Id, entity);
             return entity;
         }

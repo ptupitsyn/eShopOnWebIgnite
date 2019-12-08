@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Interfaces;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 using System.Threading.Tasks;
 using Microsoft.eShopWeb.ApplicationCore.Entities;
@@ -23,7 +24,7 @@ namespace Microsoft.eShopWeb.ApplicationCore.Services
             _itemRepository = itemRepository;
         }
 
-        public async Task CreateOrderAsync(int basketId, Address shippingAddress)
+        public async Task CreateOrderAsync(Guid basketId, Address shippingAddress)
         {
             var basket = await _basketRepository.GetByIdAsync(basketId);
             Guard.Against.NullBasket(basketId, basket);
