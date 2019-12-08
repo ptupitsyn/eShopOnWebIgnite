@@ -8,7 +8,8 @@ The aim is to demonstrate how Ignite can replace traditional SQL database in an 
 
 TODO:
 
-* int IDs - not good, replace with Long, use Ignite sequence
+* Guids instead of int ids - much better for a distributed system
+* Not a relational DB - no constraints, but we can store entire object hierarchies for faster retrieval. "Include" calls are removed, but the code still works.
 * Tests: easy to do integration tests with real in-process instance
 * Thin and Thick APIs
 * Identity implementation
