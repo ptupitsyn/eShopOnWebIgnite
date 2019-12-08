@@ -8,6 +8,7 @@ using Xunit.Abstractions;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
 using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
+using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
@@ -15,7 +16,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
     public class GetById : IDisposable
     {
         private readonly IIgniteAdapter _catalogContext;
-        private readonly OrderRepository _orderRepository;
+        private readonly IAsyncRepository<Order> _orderRepository;
         private OrderBuilder OrderBuilder { get; } = new OrderBuilder();
         private readonly ITestOutputHelper _output;
         
@@ -23,7 +24,7 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.OrderRepositoryTests
         {
             _output = output;
             _catalogContext = TestUtils.GetIgnite();
-            _orderRepository = new OrderRepository(_catalogContext);
+            _orderRepository = _catalogContext.GetRepo<Order>();
         }
 
         [Fact]
