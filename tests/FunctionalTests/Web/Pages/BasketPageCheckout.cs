@@ -8,6 +8,11 @@ using System.Net;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Apache.Ignite.Core;
+using Microsoft.eShopWeb.ApplicationCore.Entities;
+using Microsoft.eShopWeb.Infrastructure.Data;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
+using Microsoft.eShopWeb.IntegrationTests;
 using Xunit;
 
 namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
@@ -46,9 +51,11 @@ namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
             string token = GetRequestVerificationToken(stringResponse1);
 
             // Add Item to Cart
+            var catalogItems = await new IgniteAdapter(Ignition.GetIgnite()).GetRepo<CatalogItem>().ListAllAsync();
+            var catalogItemId = catalogItems.First().Id;
             var keyValues = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("id", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("id", catalogItemId.ToString()),
                 new KeyValuePair<string, string>("name", "shirt"),
                 new KeyValuePair<string, string>("price", "19.49"),
                 new KeyValuePair<string, string>("__RequestVerificationToken", token)
