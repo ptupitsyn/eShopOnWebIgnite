@@ -21,8 +21,9 @@ namespace Microsoft.eShopWeb.Infrastructure.Data
                     new QueryEntity(typeof(TK), typeof(TV))
                     {
                         Fields = GetFields<TV>().ToArray()
-                    }, 
-                }
+                    }
+                },
+                SqlEscapeAll = true
             };
             
             return ignite.GetOrCreateCache<TK, TV>(cfg);
