@@ -111,6 +111,7 @@ namespace Microsoft.eShopWeb.Web
                     services.AddIdentity<ApplicationUser, IdentityRole>()
                         .AddDefaultUI()
                         .AddUserStore<IgniteUserStore>()
+                        .AddRoleStore<IgniteRoleStore>()
                         .AddDefaultTokenProviders();
                 }
             }

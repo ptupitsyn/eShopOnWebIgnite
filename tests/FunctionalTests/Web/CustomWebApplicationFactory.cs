@@ -9,65 +9,53 @@ using Microsoft.eShopWeb.Web;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using Apache.Ignite.Core;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
+using Microsoft.eShopWeb.IntegrationTests;
 
 namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
 {
     public class CustomWebApplicationFactory<TStartup>
     : WebApplicationFactory<Startup>
     {
+        private readonly IIgniteAdapter _ignite = TestUtils.GetIgnite();
+        
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureServices(services =>
             {
-                // Create a new service provider.
-                var provider = services.BuildServiceProvider();
+                services.AddSingleton(_ignite);
 
-                // TODO: Add Ignite services
-                // Add a database context (ApplicationDbContext) using an in-memory 
-                // database for testing.
-//                services.AddDbContext<CatalogContext>(options =>
-//                {
-//                    options.UseInMemoryDatabase("InMemoryDbForTesting");
-//                    options.UseInternalServiceProvider(provider);
-//                });
+                using var scope = services.BuildServiceProvider().CreateScope();
+                var scopedServices = scope.ServiceProvider;
+                var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
 
-//                services.AddDbContext<AppIdentityDbContext>(options =>
-//                {
-//                    options.UseInMemoryDatabase("Identity");
-//                    options.UseInternalServiceProvider(provider);
-//                });
+                var logger = scopedServices
+                    .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
-                // Build the service provider.
-                var sp = services.BuildServiceProvider();
-
-                // Create a scope to obtain a reference to the database
-                // context (ApplicationDbContext).
-                using (var scope = sp.CreateScope())
+                try
                 {
-                    var scopedServices = scope.ServiceProvider;
-                    var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
+                    // Seed the database with test data.
+                    CatalogContextSeed.SeedAsync(_ignite, loggerFactory).Wait();
 
-                    var logger = scopedServices
-                        .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                    // seed sample user data
+                    var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();
 
-                    try
-                    {
-                        // Seed the database with test data.
-                        // TODO: Pass Ignite
-                        CatalogContextSeed.SeedAsync(null, loggerFactory).Wait();
-
-                        // seed sample user data
-                        var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();
-
-                        AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogError(ex, $"An error occurred seeding the " +
-                            "database with test messages. Error: {ex.Message}");
-                    }
+                    AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
+                }
+                catch (Exception ex)
+                {
+                    logger.LogError(ex, "An error occurred seeding the " +
+                                        "database with test messages. Error: {ex.Message}");
                 }
             });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            
+            _ignite.Dispose();
         }
     }
 }
