@@ -8,12 +8,12 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
         public BasketWithItemsSpecification(Guid basketId)
             :base(b => b.Id == basketId)
         {
-            AddInclude(b => b.Items);
+            // No-op.
         }
         public BasketWithItemsSpecification(string buyerId)
             :base(b => b.BuyerId == buyerId)
         {
-            AddInclude(b => b.Items);
+            // No-op.
         }
     }
 }

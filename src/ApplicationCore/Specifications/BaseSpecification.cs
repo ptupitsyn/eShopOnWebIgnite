@@ -12,8 +12,6 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
             Criteria = criteria;
         }
         public Expression<Func<T, bool>> Criteria { get; }
-        public List<Expression<Func<T, object>>> Includes { get; } = new List<Expression<Func<T, object>>>();
-        public List<string> IncludeStrings { get; } = new List<string>();
         public Expression<Func<T, object>> OrderBy { get; private set; }
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
         public Expression<Func<T, object>> GroupBy { get; private set; }
@@ -22,14 +20,6 @@ namespace Microsoft.eShopWeb.ApplicationCore.Specifications
         public int Skip { get; private set; }
         public bool IsPagingEnabled { get; private set; } = false;
 
-        protected virtual void AddInclude(Expression<Func<T, object>> includeExpression)
-        {
-            Includes.Add(includeExpression);
-        }
-        protected virtual void AddInclude(string includeString)
-        {
-            IncludeStrings.Add(includeString);
-        }
         protected virtual void ApplyPaging(int skip, int take)
         {
             Skip = skip;
