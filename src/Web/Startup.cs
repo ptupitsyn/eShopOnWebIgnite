@@ -43,7 +43,7 @@ namespace Microsoft.eShopWeb.Web
         public void ConfigureServices(IServiceCollection services)
         {
             // TODO: Add option for thin client
-            services.AddSingleton<IIgniteAdapter>(new IgniteAdapter(Ignition.Start()));
+            services.AddSingleton<IIgniteAdapter>(new IgniteAdapter(Ignition.TryGetIgnite() ?? Ignition.Start()));
             
             ConfigureCookieSettings(services);
 
