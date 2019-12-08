@@ -28,15 +28,13 @@ namespace Microsoft.eShopWeb.FunctionalTests.Web.Controllers
 
                 using var scope = services.BuildServiceProvider().CreateScope();
                 var scopedServices = scope.ServiceProvider;
-                var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
 
-                var logger = scopedServices
-                    .GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
+                var logger = scopedServices.GetRequiredService<ILogger<CustomWebApplicationFactory<TStartup>>>();
 
                 try
                 {
                     // Seed the database with test data.
-                    CatalogContextSeed.SeedAsync(_ignite, loggerFactory).Wait();
+                    CatalogContextSeed.SeedAsync(_ignite).Wait();
 
                     // seed sample user data
                     var userManager = scopedServices.GetRequiredService<UserManager<ApplicationUser>>();

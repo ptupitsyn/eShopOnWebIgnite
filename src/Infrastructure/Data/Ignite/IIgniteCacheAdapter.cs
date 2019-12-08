@@ -11,9 +11,13 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Ignite
         Task<IReadOnlyList<TV>> ListAllAsync();
         
         Task PutAsync(TK key, TV val);
+
+        Task PutAllAsync(IEnumerable<KeyValuePair<TK, TV>> pairs);
         
         Task<bool> RemoveAsync(TK key);
         
         IQueryable<TV> AsQueryable();
+
+        long GetSize();
     }
 }

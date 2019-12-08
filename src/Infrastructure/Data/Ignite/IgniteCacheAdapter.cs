@@ -31,6 +31,11 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Ignite
             return _cache.PutAsync(key, val);
         }
 
+        public Task PutAllAsync(IEnumerable<KeyValuePair<TK, TV>> pairs)
+        {
+            return _cache.PutAllAsync(pairs);
+        }
+
         public Task<bool> RemoveAsync(TK key)
         {
             return _cache.RemoveAsync(key);
@@ -39,6 +44,11 @@ namespace Microsoft.eShopWeb.Infrastructure.Data.Ignite
         public IQueryable<TV> AsQueryable()
         {
             return _cache.AsCacheQueryable().Select(e => e.Value);
+        }
+
+        public long GetSize()
+        {
+            return _cache.GetSize();
         }
     }
 }

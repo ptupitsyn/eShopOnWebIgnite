@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Web
 {
@@ -23,9 +24,8 @@ namespace Microsoft.eShopWeb.Web
                 var loggerFactory = services.GetRequiredService<ILoggerFactory>();
                 try
                 {
-                    // TODO: Seed Ignite
-                    var catalogContext = services.GetRequiredService<object>();
-                    await CatalogContextSeed.SeedAsync(catalogContext, loggerFactory);
+                    var catalogContext = services.GetRequiredService<IIgniteAdapter>();
+                    await CatalogContextSeed.SeedAsync(catalogContext);
 
                     var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
                     await AppIdentityDbContextSeed.SeedAsync(userManager);
