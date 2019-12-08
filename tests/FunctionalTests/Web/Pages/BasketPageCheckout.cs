@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
@@ -51,8 +52,9 @@ namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
             string token = GetRequestVerificationToken(stringResponse1);
 
             // Add Item to Cart
+            var itemName = ".NET Black & White Mug";
             var catalogItems = await new IgniteAdapter(Ignition.GetIgnite()).GetRepo<CatalogItem>().ListAllAsync();
-            var catalogItemId = catalogItems.First().Id;
+            var catalogItemId = catalogItems.Single(x => x.Name == itemName).Id;
             var keyValues = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("id", catalogItemId.ToString()),
@@ -68,7 +70,7 @@ namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
             var stringResponse = await postResponse.Content.ReadAsStringAsync();
 
             // Assert
-            Assert.Contains(".NET Black &amp; White Mug", stringResponse);
+            Assert.Contains(HtmlEncoder.Default.Encode(itemName), stringResponse);
 
             keyValues.Clear();
             keyValues.Add(new KeyValuePair<string, string>("__RequestVerificationToken", token));
