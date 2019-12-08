@@ -6,14 +6,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.Web.Features.MyOrders
 {
     public class GetMyOrdersHandler : IRequestHandler<GetMyOrders, IEnumerable<OrderViewModel>>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IAsyncRepository<Order> _orderRepository;
 
-        public GetMyOrdersHandler(IOrderRepository orderRepository)
+        public GetMyOrdersHandler(IAsyncRepository<Order> orderRepository)
         {
             _orderRepository = orderRepository;
         }

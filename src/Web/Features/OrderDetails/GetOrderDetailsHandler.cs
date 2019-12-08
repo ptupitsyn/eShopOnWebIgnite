@@ -5,14 +5,15 @@ using Microsoft.eShopWeb.Web.ViewModels;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate;
 
 namespace Microsoft.eShopWeb.Web.Features.OrderDetails
 {
     public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderViewModel>
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IAsyncRepository<Order> _orderRepository;
 
-        public GetOrderDetailsHandler(IOrderRepository orderRepository)
+        public GetOrderDetailsHandler(IAsyncRepository<Order> orderRepository)
         {
             _orderRepository = orderRepository;
         }

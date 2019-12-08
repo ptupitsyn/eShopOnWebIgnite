@@ -12,7 +12,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
 {
     public class GetMyOrders_Should
     {
-        private readonly Mock<IOrderRepository> _mockOrderRepository;
+        private readonly Mock<IAsyncRepository<Order>> _mockOrderRepository;
 
         public GetMyOrders_Should()
         {
@@ -20,7 +20,7 @@ namespace Microsoft.eShopWeb.UnitTests.MediatorHandlers.OrdersTests
             var address = new Address(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>());
             Order order = new Order("buyerId", address, new List<OrderItem> { item });
 
-            _mockOrderRepository = new Mock<IOrderRepository>();
+            _mockOrderRepository = new Mock<IAsyncRepository<Order>>();
             _mockOrderRepository.Setup(x => x.ListAsync(It.IsAny<ISpecification<Order>>())).ReturnsAsync(new List<Order> { order });
         }
 
