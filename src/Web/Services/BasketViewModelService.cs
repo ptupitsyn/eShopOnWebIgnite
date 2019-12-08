@@ -1,4 +1,5 @@
-﻿using Microsoft.eShopWeb.ApplicationCore.Entities;
+﻿using System;
+using Microsoft.eShopWeb.ApplicationCore.Entities;
 using Microsoft.eShopWeb.ApplicationCore.Entities.BasketAggregate;
 using Microsoft.eShopWeb.ApplicationCore.Interfaces;
 using Microsoft.eShopWeb.ApplicationCore.Specifications;
@@ -42,7 +43,7 @@ namespace Microsoft.eShopWeb.Web.Services
             var viewModel = new BasketViewModel();
             viewModel.Id = basket.Id;
             viewModel.BuyerId = basket.BuyerId;
-            viewModel.Items = await GetBasketItems(basket.Items); ;
+            viewModel.Items = await GetBasketItems(basket.Items);
             return viewModel;
         }
 
@@ -59,7 +60,7 @@ namespace Microsoft.eShopWeb.Web.Services
             };
         }
 
-        private async Task<List<BasketItemViewModel>> GetBasketItems(IReadOnlyCollection<BasketItem> basketItems)
+        private async Task<List<BasketItemViewModel>> GetBasketItems(IEnumerable<BasketItem> basketItems)
         {
             var items = new List<BasketItemViewModel>();
             foreach (var item in basketItems)
@@ -72,6 +73,11 @@ namespace Microsoft.eShopWeb.Web.Services
                     CatalogItemId = item.CatalogItemId
                 };
                 var catalogItem = await _itemRepository.GetByIdAsync(item.CatalogItemId);
+                if (catalogItem == null)
+                {
+                    throw new InvalidOperationException("Catalog item not found: " + item.CatalogItemId);
+                }
+                
                 itemModel.PictureUrl = _uriComposer.ComposePicUri(catalogItem.PictureUri);
                 itemModel.ProductName = catalogItem.Name;
                 items.Add(itemModel);

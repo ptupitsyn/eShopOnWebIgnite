@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.eShopWeb.FunctionalTests.Web.Controllers;
 using Microsoft.eShopWeb.Web;
 using System.Collections.Generic;
@@ -45,12 +46,13 @@ namespace Microsoft.eShopWeb.FunctionalTests.WebRazorPages
             string token = GetRequestVerificationToken(stringResponse1);
 
             // Add Item to Cart
-            var keyValues = new List<KeyValuePair<string, string>>();
-            keyValues.Add(new KeyValuePair<string, string>("id", "2"));
-            keyValues.Add(new KeyValuePair<string, string>("name", "shirt"));
-
-            keyValues.Add(new KeyValuePair<string, string>("price", "19.49"));
-            keyValues.Add(new KeyValuePair<string, string>("__RequestVerificationToken", token));
+            var keyValues = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("id", Guid.NewGuid().ToString()),
+                new KeyValuePair<string, string>("name", "shirt"),
+                new KeyValuePair<string, string>("price", "19.49"),
+                new KeyValuePair<string, string>("__RequestVerificationToken", token)
+            };
 
             var formContent = new FormUrlEncodedContent(keyValues);
 

@@ -10,6 +10,11 @@ namespace Microsoft.eShopWeb.IntegrationTests
     {
         public static IIgniteAdapter GetIgnite()
         {
+            // Fix NullReferenceException handling - see
+            // http://apache-ignite-users.70518.x6.nabble.com/SIGSEGV-instead-of-NullReferenceException-when-using-Ignite-NET-td29385.html
+            // https://apacheignite-net.readme.io/docs/troubleshooting
+            Environment.SetEnvironmentVariable("COMPlus_EnableAlternateStackCheck", "1");
+            
             var cfg = new IgniteConfiguration
             {
                 DiscoverySpi = new TcpDiscoverySpi
