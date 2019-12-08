@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Apache.Ignite.Core;
 using Microsoft.EntityFrameworkCore;
@@ -32,7 +33,8 @@ namespace Microsoft.eShopWeb.IntegrationTests.Repositories.BasketRepositoryTests
             var basketService = new BasketService(_basketRepository, null);
             await _basketRepository.AddAsync(basket);
 
-            await basketService.SetQuantities(_basketBuilder.BasketId, new Dictionary<string, int> { { "0", 0 } });
+            await basketService.SetQuantities(_basketBuilder.BasketId,
+                new Dictionary<string, int> {{basket.Items.Single().Id.ToString(), 0}});
 
             basket = await _basketRepository.GetByIdAsync(basket.Id);
             Assert.Equal(0, basket.Items.Count);
