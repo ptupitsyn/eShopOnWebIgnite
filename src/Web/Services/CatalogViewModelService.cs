@@ -37,7 +37,7 @@ namespace Microsoft.eShopWeb.Web.Services
             _uriComposer = uriComposer;
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, Guid? brandId, Guid? typeId)
         {
             _logger.LogInformation("GetCatalogItems called.");
 
@@ -65,8 +65,8 @@ namespace Microsoft.eShopWeb.Web.Services
                 }),
                 Brands = await GetBrands(),
                 Types = await GetTypes(),
-                BrandFilterApplied = brandId ?? 0,
-                TypesFilterApplied = typeId ?? 0,
+                BrandFilterApplied = brandId,
+                TypesFilterApplied = typeId,
                 PaginationInfo = new PaginationInfoViewModel()
                 {
                     ActualPage = pageIndex,

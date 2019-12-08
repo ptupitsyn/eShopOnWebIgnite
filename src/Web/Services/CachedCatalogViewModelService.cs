@@ -32,7 +32,7 @@ namespace Microsoft.eShopWeb.Web.Services
                     });
         }
 
-        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, int? brandId, int? typeId)
+        public async Task<CatalogIndexViewModel> GetCatalogItems(int pageIndex, int itemsPage, Guid? brandId, Guid? typeId)
         {
             string cacheKey = String.Format(_itemsKeyTemplate, pageIndex, itemsPage, brandId, typeId);
             return await _cache.GetOrCreateAsync(cacheKey, async entry =>
