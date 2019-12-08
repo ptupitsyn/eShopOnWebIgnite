@@ -24,6 +24,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
+using Apache.Ignite.Core;
+using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Web
 {
@@ -40,7 +42,8 @@ namespace Microsoft.eShopWeb.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO: Add Ignite-based services
+            // TODO: Add option for thin client
+            services.AddSingleton<IIgniteAdapter>(new IgniteAdapter(Ignition.Start()));
             
             ConfigureCookieSettings(services);
 
