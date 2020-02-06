@@ -25,6 +25,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mime;
 using Apache.Ignite.Core;
+using Apache.Ignite.Core.Discovery.Tcp;
+using Apache.Ignite.Core.Discovery.Tcp.Static;
 using Microsoft.eShopWeb.Infrastructure.Data.Ignite;
 
 namespace Microsoft.eShopWeb.Web
@@ -42,8 +44,7 @@ namespace Microsoft.eShopWeb.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // TODO: Add option for thin client
-            services.AddSingleton<IIgniteAdapter>(new IgniteAdapter(Ignition.TryGetIgnite() ?? Ignition.Start()));
+            services.AddSingleton<IIgniteAdapter>(GetIgniteAdapter());
             
             ConfigureCookieSettings(services);
 
@@ -99,6 +100,30 @@ namespace Microsoft.eShopWeb.Web
             });
 
             _services = services; // used to debug registered services
+        }
+
+        private static IgniteAdapter GetIgniteAdapter()
+        {
+            // TODO: Add option for thin client
+            var ignite = Ignition.TryGetIgnite() ?? Ignition.Start(GetIgniteConfig());
+            
+            return new IgniteAdapter(ignite);
+        }
+
+        private static IgniteConfiguration GetIgniteConfig()
+        {
+            return new IgniteConfiguration
+            {
+                Localhost = "127.0.0.1",
+                DiscoverySpi = new TcpDiscoverySpi
+                {
+                    SocketTimeout = TimeSpan.FromSeconds(0.3),
+                    IpFinder = new TcpDiscoveryStaticIpFinder
+                    {
+                        Endpoints = new[]{"127.0.0.1:47500"}
+                    }
+                }
+            };
         }
 
         private static void CreateIdentityIfNotCreated(IServiceCollection services)

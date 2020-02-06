@@ -25,7 +25,8 @@ namespace Microsoft.eShopWeb.IntegrationTests
                         Endpoints = new[]{"127.0.0.1:47500"}
                     }
                 },
-                AutoGenerateIgniteInstanceName = true
+                AutoGenerateIgniteInstanceName = true,
+                Localhost = "127.0.0.1"
             };
 
             var ignite = Ignition.Start(cfg);
